@@ -1,61 +1,120 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+TestClearit
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Una aplicación de gestión de tickets de soporte desarrollada con Laravel, Livewire y Alpine.js, utilizando Docker y Sail para un entorno de desarrollo consistente.
+Tabla de Contenidos
 
-## About Laravel
+    Requisitos Previos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+    Instalación
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+    Configuración Inicial
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+    Uso
 
-## Learning Laravel
+    Licencia
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Requisitos Previos
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Asegúrate de tener instalado lo siguiente en tu sistema:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    Git: Para clonar el repositorio.
 
-## Laravel Sponsors
+    Docker Desktop: Incluye Docker Engine y Docker Compose, necesarios para ejecutar los servicios de la aplicación.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+    Composer (opcional, si no utilizas el helper sail para su instalación inicial): Puedes descargarlo desde getcomposer.org.
 
-### Premium Partners
+Instalación
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Sigue estos pasos para poner en marcha el proyecto localmente:
 
-## Contributing
+    Clonar el repositorio:
+    Abre tu terminal y ejecuta:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    git clone https://github.com/santibruera/testClearit.git testClearit
+    cd testClearit
 
-## Code of Conduct
+    (Si lo deseas, puedes reemplazar testClearit por el nombre que prefieras para la carpeta de tu proyecto).
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    Copiar el archivo de entorno:
+    Crea tu archivo .env a partir del ejemplo:
 
-## Security Vulnerabilities
+    cp .env.example .env
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    Importante: Edita el archivo .env que acabas de crear. Configura tus credenciales de base de datos (DB_DATABASE, DB_USERNAME, DB_PASSWORD, etc.), la URL de la aplicación (APP_URL=http://localhost) y la configuración de correo (MAIL_*) según tu entorno local. Para probar las notificaciones, puedes usar un servicio como Mailtrap.
 
-## License
+    Iniciar Docker y Dependencias:
+    Inicia Docker Desktop. Luego, en la terminal, inicia los servicios de la aplicación (PHP, MySQL, Nginx, etc.):
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    ./vendor/bin/sail up -d
+
+    Esto construirá e iniciará los contenedores de Docker en segundo plano. La primera vez puede tardar unos minutos.
+
+    Instalar dependencias de Composer:
+    Una vez que los contenedores estén funcionando, instala las dependencias de PHP de tu proyecto:
+
+    ./vendor/bin/sail composer install
+
+    Generar la clave de la aplicación:
+    Genera una clave de aplicación única para tu .env (crucial para la seguridad de Laravel):
+
+    ./vendor/bin/sail artisan key:generate
+
+    Ejecutar migraciones y seeders:
+    Crea las tablas de la base de datos y pobla con datos de prueba (usuarios user y agent, tickets, etc.):
+
+    ./vendor/bin/sail artisan migrate:fresh --seed
+
+    Advertencia: Este comando eliminará todos los datos de tu base de datos actual antes de recrearla y sembrarla. Úsalo solo en entornos de desarrollo.
+
+    Crear el enlace de almacenamiento público:
+    Para que los archivos adjuntos a los tickets sean accesibles vía web, crea el enlace simbólico:
+
+    ./vendor/bin/sail artisan storage:link
+
+    Instalar y Compilar dependencias de NPM (Frontend):
+    Si tu proyecto utiliza Tailwind CSS, Vite u otros activos de frontend, necesitarás compilar los recursos:
+
+    ./vendor/bin/sail npm install
+    ./vendor/bin/sail npm run dev # Para desarrollo (observa cambios y recarga automáticamente)
+    # o
+    # ./vendor/bin/sail npm run build # Para producción (compila para un despliegue optimizado)
+
+Uso
+
+Una vez completada la instalación, tu aplicación debería estar accesible en la URL configurada en tu .env (normalmente http://localhost).
+
+Puedes iniciar sesión con los usuarios de prueba creados por los seeders:
+
+    Usuario Creador de Tickets (user rol):
+
+        Correo: user@example.com
+
+        Contraseña: password
+
+    Agente de Soporte (agent rol):
+
+        Correo: agent@example.com
+
+        Contraseña: password
+
+Explora las funcionalidades de creación de tickets, visualización de tickets por rol y edición de tickets para usuarios.
+
+Comandos útiles de Sail:
+
+    ./vendor/bin/sail up -d: Inicia los contenedores en segundo plano.
+
+    ./vendor/bin/sail stop: Detiene los contenedores.
+
+    ./vendor/bin/sail down: Detiene y elimina los contenedores (elimina volúmenes anónimos por defecto).
+
+    ./vendor/bin/sail artisan [comando]: Ejecuta comandos Artisan dentro del contenedor PHP.
+
+    ./vendor/bin/sail composer [comando]: Ejecuta comandos Composer dentro del contenedor PHP.
+
+    ./vendor/bin/sail npm [comando]: Ejecuta comandos NPM dentro del contenedor Node.js.
+
+    ./vendor/bin/sail bash: Abre una sesión bash dentro del contenedor PHP.
+
+Licencia
+
+Este proyecto está bajo la licencia MIT. Consulta el archivo LICENSE para más detalles.
